@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gen</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<div class="chat-container">
+    <button class="new-chat-button" onclick="newChat()">
+        <img src="https://cdn-icons-png.flaticon.com/128/1159/1159633.png" alt="New Chat Icon" />
+        New Chat
+    </button>
+    <div class="model-select" id="model-selector" onclick="toggleModelSelect()">
+        Gen
+    </div>
+    <canvas id="model-select-canvas" class="model-select-canvas" width="200" height="100"></canvas>
+    <div class="model-options" id="model-options">
+        <select onchange="selectModel()">
+            <option value="typhoon-v1.5-instruct">v1.5-instruct</option>
+            <option value="typhoon-v1.5-instruct-fc">v1.5-instruct-fc</option>
+        </select>
+    </div>
+    <div class="chat-box" id="chat-box"></div>
+    <div class="user-input">
+        <textarea id="user-message" placeholder="พิมพ์ข้อความที่นี่..." onkeypress="checkEnter(event)"></textarea>
+        <button id="send-button" onclick="sendMessage()">
+            <img src="https://cdn-icons-png.flaticon.com/128/318/318476.png" alt="Send Icon" />
+        </button>
+    </div>
+    <div class="tab" onclick="toggleCodeTab()">แสดงโค้ด</div>
+    <div class="canvas-container">
+        <canvas id="codeCanvas" class="code-canvas" width="580" height="300"></canvas>
+        <button class="canvas-copy-button" onclick="copyCanvasCode()">
+            <img src="https://cdn-icons-png.flaticon.com/128/1621/1621635.png" alt="Copy Icon" />
+        </button>
+    </div>
+    <img id="selected-icon" src="https://cdn-icons-png.flaticon.com/128/9554/9554273.png" style="display:none;" />
+</div>
+
+<script src="scripts.js"></script>
+
+</body>
+</html>
