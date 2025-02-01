@@ -257,7 +257,7 @@ function displayMessage(message, sender) {
 function typeWriterEffect(element, text, index = 0) {
     if (index < text.length) {
         element.innerHTML += text.charAt(index);
-        setTimeout(() => typeWriterEffect(element, text, index + 1), 50);
+        setTimeout(() => typeWriterEffect(element, text, index + 1), 5); // เปลี่ยนความเร็วเป็น 0.3 วินาที (30 มิลลิวินาที)
     } else {
         element.classList.remove('typing-effect');
         element.classList.add('fade-in');
