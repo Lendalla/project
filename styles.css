@@ -160,8 +160,8 @@ body {
     border-radius: 10px;
     position: absolute;
     bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 10px; /* ปรับตำแหน่งไปทางซ้าย */
+    transform: none; /* ลบการแปลงตำแหน่ง */
 }
 .dark-mode .user-input {
     background: #555;
@@ -220,7 +220,8 @@ body {
     transition: transform 0.3s ease, background 0.3s ease; /* เพิ่ม transition */
     user-select: none;
     background: none;
-    position: relative;
+    position: absolute;
+    left: 10px; /* ปรับตำแหน่งไปทางซ้าย 10px */
 }
 .user-input button:hover {
     background: #E9EAEB; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
