@@ -3,59 +3,6 @@ let codeVisible = false;
 let darkMode = false; // สถานะของโหมดมืด
 let messageHistory = []; // เก็บประวัติข้อความ
 
-// ฟังก์ชันสำหรับเปิด/ปิดการเลือก Model
-function toggleModelSelect() {
-    const canvas = document.getElementById('model-select-canvas');
-    const ctx = canvas.getContext('2d');
-    const selectedModel = document.querySelector('#model-options select').value;
-    if (canvas.style.display === 'none' || canvas.style.display === '') {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#000";
-        ctx.font = "16px Arial";
-        ctx.strokeStyle = "#000"; /* เพิ่มขอบสีดำ */
-        ctx.strokeText("v1.5-instruct", 40, 30);
-        ctx.strokeText("v1.5-instruct-fc", 40, 70);
-        if (selectedModel === 'typhoon-v1.5-instruct') {
-            ctx.drawImage(document.getElementById('selected-icon'), 10, 15, 20, 20);
-        } else if (selectedModel === 'typhoon-v1.5-instruct-fc') {
-            ctx.drawImage(document.getElementById('selected-icon'), 10, 55, 20, 20);
-        }
-        canvas.style.display = 'block';
-        canvas.removeEventListener('click', selectModelFromCanvas);
-        canvas.addEventListener('click', selectModelFromCanvas);
-    } else {
-        canvas.style.display = 'none';
-        canvas.removeEventListener('click', selectModelFromCanvas);
-    }
-}
-
-// ฟังก์ชันสำหรับเลือก Model จาก Canvas
-function selectModelFromCanvas(event) {
-    const canvas = document.getElementById('model-select-canvas');
-    const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#000";
-    ctx.font = "16px Arial";
-    if (y > 10 && y < 40) {
-        ctx.drawImage(document.getElementById('selected-icon'), 10, 15, 20, 20);
-        ctx.fillText("v1.5-instruct", 40, 30);
-        ctx.fillText("v1.5-instruct-fc", 40, 70);
-        document.querySelector('#model-options select').value = 'typhoon-v1.5-instruct';
-    } else if (y > 50 && y < 80) {
-        ctx.drawImage(document.getElementById('selected-icon'), 10, 55, 20, 20);
-        ctx.fillText("v1.5-instruct", 40, 30);
-        ctx.fillText("v1.5-instruct-fc", 40, 70);
-        document.querySelector('#model-options select').value = 'typhoon-v1.5-instruct-fc';
-    }
-}
-
 // ฟังก์ชันสำหรับส่งข้อความ
 async function sendMessage() {
     const userMessage = document.getElementById('user-message').value.trim();
@@ -63,6 +10,7 @@ async function sendMessage() {
 
     displayMessage(userMessage, 'user');
     document.getElementById('user-message').value = '';
+    document.getElementById('user-message').style.height = '30px'; // Reset height to initial size
 
     messageHistory.push({ role: 'user', content: userMessage }); // เก็บข้อความในประวัติ
 
@@ -74,35 +22,44 @@ async function sendMessage() {
     displayTypingIndicator();
 
     try {
-        const model = document.querySelector('#model-options select').value;
-        const endpoint = 'https://api.opentyphoon.ai/v1/chat/completions';
-        const headers = {
-            Authorization: 'Bearer sk-frn8Q6cNenIlNT0oSmOJ1HVnSIrnjB3c6XKv12xeoSMNFx45'
-        };
-        const data = {
-            model: model,
-            max_tokens: 512,
-            messages: [
-                { role: "system", content: model === 'typhoon-v1.5-instruct-fc' ? "You are a helpful assistant named ArtX." : "You are Gen, a large language model trained by SCB And Padlojh. Your goal is to assist with helpful, informative, and friendly responses. Always adapt to the user's tone, be conversational, and provide clear and concise answers. Avoid giving medical, legal, or financial advice." },
-                ...messageHistory // ส่งประวัติข้อความไปด้วย
-            ],
-            temperature: model === 'typhoon-v1.5-instruct-fc' ? 0.2 : 0.4,
-            top_p: 0.9,
-            top_k: 0,
-            repetition_penalty: model === 'typhoon-v1.5-instruct-fc' ? 1.1 : 1.05,
-            min_p: 0.05
-        };
+        const model = document.querySelector('#model-options').value;
+        let botResponse;
 
-        const response = await axios.post(endpoint, data, { headers });
-        const botResponse = response.data.choices[0].message.content;
+        if (model === 'typhoon-v1.5-instruct-fc' || model === 'openthaigpt1.5-7b-instruct') {
+            botResponse = 'ยังไม่เปิดให้ใช้งาน จะเปิดให้ใช้งานในอีกล้านปีข้างหน้า';
+        } else {
+            const endpoint = 'https://api.opentyphoon.ai/v1/chat/completions';
+            const headers = {
+                Authorization: 'Bearer sk-frn8Q6cNenIlNT0oSmOJ1HVnSIrnjB3c6XKv12xeoSMNFx45'
+            };
+            const data = {
+                model: model,
+                max_tokens: 512,
+                messages: [
+                    { role: "system", content: model === 'typhoon-v1.5-instruct-fc' ? "You are a helpful assistant named ArtX." : "You are Gen, a large language model trained by SCB And Padlojh. Your goal is to assist with helpful, informative, and friendly responses. Always adapt to the user's tone, be conversational, and provide clear and concise answers. Avoid giving medical, legal, or financial advice." },
+                    ...messageHistory // ส่งประวัติข้อความไปด้วย
+                ],
+                temperature: model === 'typhoon-v1.5-instruct-fc' ? 0.2 : 0.4,
+                top_p: 0.9,
+                top_k: 0,
+                repetition_penalty: model === 'typhoon-v1.5-instruct-fc' ? 1.1 : 1.05,
+                min_p: 0.05
+            };
+
+            const response = await axios.post(endpoint, data, { headers });
+            botResponse = response.data.choices[0].message.content;
+        }
+
         displayMessage(botResponse, 'bot');
         messageHistory.push({ role: 'bot', content: botResponse }); // เก็บข้อความในประวัติ
         resetScroll();
     } catch (error) {
         console.error('Error fetching data from Chatai:', error);
-        if (error.response) {
+        if (error.message === 'Failed to fetch') {
+            displayMessage('ขอโทษ, เกิดข้อผิดพลาดในการส่งข้อความ.', 'bot');
+        } else if (error.response) {
             console.error('Response data:', error.response.data);
-            if (error.response.status === 400 && error.response.data.detail === 'Model not found') {
+            if (error.response.status === 404 && error.response.data.detail === 'Not Found') {
                 displayMessage('ขอโทษ, ยังไม่เปิดให้ใช้งาน.', 'bot');
             } else {
                 displayMessage('ขอโทษ, ข้อความของคุณไม่ถูกต้องหรือไม่สามารถประมวลผลได้.', 'bot');
@@ -119,9 +76,9 @@ async function sendMessage() {
 
 // ฟังก์ชันสำหรับเลือก Model
 function selectModel() {
-    const selectedModel = document.querySelector('#model-options select').value;
+    const selectedModel = document.querySelector('#model-options').value;
     console.log("Selected model: " + selectedModel);
-    toggleModelSelect();
+    newChat(); // Start a new chat when a new model is selected
 }
 
 // ฟังก์ชันสำหรับตรวจสอบว่าเป็นโค้ดหรือไม่
@@ -143,16 +100,17 @@ function displayCode(codeContent) {
     
     const copyButton = document.createElement('button');
     copyButton.className = 'copy-button';
-    copyButton.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/128/1621/1621635.png" alt="Copy Icon" />';
+    copyButton.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/128/5859/5859288.png" alt="Copy Icon" />';
     copyButton.onclick = () => {
         copyToClipboard(codeContent);
-        copyButton.querySelector('img').src = 'https://cdn-icons-png.flaticon.com/128/16417/16417170.png';
+        copyButton.querySelector('img').src = 'https://cdn-icons-png.flaticon.com/128/6974/6974447.png';
     };
 
     pre.appendChild(codeElement);
+    pre.appendChild(copyButton); // Move the copy button inside the code canvas at the bottom right corner
     codeDiv.appendChild(pre);
-    codeDiv.appendChild(copyButton);
     chatBox.appendChild(codeDiv);
+    resetScroll(); // Ensure the chat box scrolls to the bottom
 }
 
 // ฟังก์ชันสำหรับคัดลอกโค้ดไปยังคลิปบอร์ด
@@ -162,30 +120,22 @@ function copyToClipboard(text) {
     });
 }
 
-// ฟังก์ชันสำหรับเปิด/ปิดการแสดงโค้ด (สำหรับ canvas ด้านล่าง)
-function toggleCodeTab() {
-    codeVisible = !codeVisible;
-    const canvas = document.getElementById('codeCanvas');
-    canvas.style.display = codeVisible ? 'block' : 'none';
-}
-
-// ฟังก์ชันสำหรับคัดลอกโค้ดจาก canvas ไปยังคลิปบอร์ด
-function copyCanvasCode() {
-    const canvas = document.getElementById('codeCanvas');
-    const ctx = canvas.getContext('2d');
-    const codeContent = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    navigator.clipboard.writeText(codeContent).then(() => {
-        alert('คัดลอกโค้ดจาก canvas เรียบร้อยแล้ว');
-    }).catch(err => {
-        console.error('Failed to copy text: ', err);
-    });
-}
-
 // ฟังก์ชันสำหรับตรวจสอบการกด Enter
 function checkEnter(event) {
+    const textarea = event.target;
     if (event.key === 'Enter' && !event.shiftKey) {
         sendMessage();
         event.preventDefault();
+    } else {
+        autoResize(textarea);
+    }
+}
+
+// ฟังก์ชันสำหรับปรับขนาด textarea อัตโนมัติ
+function autoResize(textarea) {
+    textarea.style.height = 'auto'; // Reset height to auto
+    if (textarea.scrollHeight > textarea.clientHeight) {
+        textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height based on content
     }
 }
 
@@ -199,6 +149,7 @@ function displayTypingIndicator() {
     setTimeout(() => {
         typingIndicator.style.opacity = 1;
     }, 10);
+    resetScroll(); // Ensure the chat box scrolls to the bottom
 }
 
 // ฟังก์ชันสำหรับซ่อน Indicator การพิมพ์
@@ -236,6 +187,10 @@ function displayMessage(message, sender) {
                 chatBox.appendChild(messageDiv);
             }
             displayCode(codeContent);
+        } else {
+            // If no code block is found, display the message as usual
+            messageDiv.innerHTML = icon + `<div class="message-content">${formattedMessage}</div>`;
+            chatBox.appendChild(messageDiv);
         }
     } else {
         if (sender === 'user') {
@@ -250,6 +205,7 @@ function displayMessage(message, sender) {
     
     setTimeout(() => { 
         messageDiv.style.opacity = 1;
+        resetScroll(); // Ensure the chat box scrolls to the bottom
     }, 10);
 }
 
@@ -266,6 +222,7 @@ function typeWriterEffect(element, text, index = 0) {
             element.parentElement.querySelector('.icon').src = 'https://cdn-icons-png.flaticon.com/128/1694/1694153.png';
             element.parentElement.querySelector('.icon').classList.remove('icon-hidden');
             element.parentElement.querySelector('.icon').classList.add('icon-visible');
+            resetScroll(); // Ensure the chat box scrolls to the bottom
         }, 10);
     }
 }
@@ -293,12 +250,44 @@ function toggleMode() {
 
 // ฟังก์ชันสำหรับเริ่มการสนทนาใหม่
 function newChat() {
-    const messages = document.querySelectorAll('.message');
-    messages.forEach(message => {
-        message.classList.add('hide');
-    });
-    setTimeout(() => {
-        document.getElementById('chat-box').innerHTML = '';
-        messageHistory = []; // รีเซ็ตประวัติข้อความ
-    }, 500);
+    const chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML = '';
+    messageHistory = []; // รีเซ็ตประวัติข้อความ
+    resetScroll(); // Ensure the chat box scrolls to the bottom
 }
+
+// ฟังก์ชันสำหรับปรับขนาด canvas
+function resizeCanvas() {
+    const chatContainer = document.querySelector('.chat-container');
+    chatContainer.style.height = `${window.innerHeight}px`;
+    chatContainer.style.width = `${window.innerWidth}px`;
+}
+
+window.addEventListener('load', resizeCanvas);
+window.addEventListener('resize', resizeCanvas);
+
+const textarea = document.getElementById('auto-resize-textarea');
+
+textarea.addEventListener('input', autoResize);
+
+function autoResize() {
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+    const containerHeight = textarea.parentElement.clientHeight;
+    const textareaHeight = textarea.scrollHeight;
+    const bottomOffset = containerHeight - textareaHeight;
+    textarea.style.bottom = `${bottomOffset}px`;
+}
+
+function scrollToBottom() {
+    const chatBox = document.getElementById('chat-box');
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+const userMessage = document.getElementById('user-message');
+userMessage.addEventListener('focus', scrollToBottom);
+
+// ฟังก์ชันสำหรับรีเซ็ตขนาด textarea เมื่อสูญเสียโฟกัส
+document.getElementById('user-message').addEventListener('blur', function() {
+    this.style.height = '30px'; // Reset height to initial size
+});
