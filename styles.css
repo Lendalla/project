@@ -176,7 +176,7 @@ body {
     resize: none; /* ปิดการปรับขนาดโดยผู้ใช้ */
     min-height: 30px; /* ปรับความสูงเริ่มต้นให้เท่ากับขนาดหลังเลิกใช้ */
     max-height: 200px; /* เพิ่มความสูงสูงสุด */
-    min-width: 1000px; /* เพิ่มความกว้างเริ่มต้นเป็น 200px */
+    min-width: 100%; /* เพิ่มความกว้างเริ่มต้นเป็น 100% */
     text-align: left; /* จัดข้อความไปทางซ้าย */
     animation: typing-text 0.5s ease;
     color: #000;
@@ -431,4 +431,42 @@ body {
 }
 .icon-visible {
     opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .user-input textarea {
+        min-width: 100%; /* ปรับความกว้างเริ่มต้นให้เข้ากับหน้าจอขนาดเล็ก */
+    }
+}
+
+@media (max-width: 480px) {
+    .user-input textarea {
+        font-size: 16px; /* ปรับขนาดฟอนต์ให้เล็กลงสำหรับหน้าจอขนาดเล็ก */
+        padding: 10px 8px; /* ปรับ padding ให้เข้ากับหน้าจอขนาดเล็ก */
+    }
+    .chat-container {
+        width: 100%; /* ปรับความกว้างของ chat-container ให้เข้ากับหน้าจอขนาดเล็ก */
+        margin: 0;
+        border-radius: 0;
+    }
+    .chat-box {
+        height: calc(100% - 120px); /* ปรับความสูงของ chat-box ให้เข้ากับหน้าจอขนาดเล็ก */
+        margin-top: 40px;
+    }
+    .user-input {
+        height: 50px; /* ปรับความสูงของ user-input ให้เข้ากับหน้าจอขนาดเล็ก */
+        bottom: 10px;
+    }
+    .new-chat-button {
+        top: 5px; /* ปรับตำแหน่งของ new-chat-button ให้เข้ากับหน้าจอขนาดเล็ก */
+        left: 5px;
+        padding: 8px;
+    }
+    .model-select {
+        top: 5px; /* ปรับตำแหน่งของ model-select ให้เข้ากับหน้าจอขนาดเล็ก */
+        padding: 3px 10px;
+    }
+    .model-select select {
+        font-size: 14px; /* ปรับขนาดฟอนต์ของ model-select ให้เข้ากับหน้าจอขนาดเล็ก */
+    }
 }
