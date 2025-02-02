@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Product+Sans&display=swap');
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #f4f4f4; /* สีพื้นหลังโหมดสว่าง */
+    font-family: 'Product Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #fff;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -8,23 +10,22 @@ body {
     transition: background-color 0.5s;
 }
 .dark-mode {
-    background-color: #333; /* สีพื้นหลังโหมดมืด */
-    color: #fff; /* สีข้อความในโหมดมืด */
+    background-color: #333;
+    color: #fff;
 }
 .chat-container {
-    width: 100%;
-    height: 90%;
-    max-width: 1500px;
+    width: 90%;
+    max-width: 1200px;
     margin: auto;
-    background: #fff; /* สีพื้นหลังสำหรับกล่องสนทนา */
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgb(199, 199, 199);
     overflow: hidden;
     position: relative;
     transition: background 0.5s;
 }
 .dark-mode .chat-container {
-    background: #ffffff; /* สีพื้นหลังสำหรับกล่องสนทนาในโหมดมืด */
+    background: #d5d5d5;
 }
 .model-select {
     position: absolute;
@@ -32,44 +33,57 @@ body {
     left: 50%;
     transform: translateX(-50%);
     padding: 5px 15px;
-    border-radius: 10px; /* ปรับขอบมนให้เข้ากับปุ่มอื่น */
-    border: 1px solid #000; /* เปลี่ยนสีฟ้าเป็นสีดำ */
+    border-radius: 5px;
+    border: 1px solid #ccc; /* เปลี่ยนสีขอบเป็นสีเทา */
     cursor: pointer;
-    background: #fff;
+    background: none; /* ลบสีพื้นหลัง */
     user-select: none;
     transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.model-select select {
+    border: none;
+    background: transparent;
+    padding: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
 }
 .model-select:hover {
-    background: #D7D7D8;
+    background: #f0f0f0;
 }
 .dark-mode .model-select {
-    background: #ffffff;
+    background: #555;
 }
 .new-chat-button {
     position: absolute;
     top: 10px;
     left: 10px;
-    padding: 5px 15px;
-    border-radius: 5px;
-    border: 1px solid #000; /* เปลี่ยนสีฟ้าเป็นสีดำ */
+    padding: 10px; /* เพิ่มขนาดปุ่ม */
+    border-radius: 50%; /* เปลี่ยนรูปร่างเป็นวงกลม */
+    border: 1px solid #fff; /* เปลี่ยนสีขอบเป็นสีขาว */
     cursor: pointer;
-    background: #fff;
+    background: none; /* ลบสีพื้นหลัง */
     user-select: none;
-    transition: background 0.3s ease, transform 0.5s ease;
     display: flex;
     align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease; /* เพิ่ม transition */
 }
-.new-chat-button:active {
-    transform: scale(1.15);
-    transition: transform 1s ease; /* ปรับความเร็วการเปลี่ยนขนาดกลับเป็น 1 วินาที */
+.new-chat-button:hover {
+    background: #E9EAEB; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
 }
 .new-chat-button img {
     width: 20px;
     height: auto;
-    margin-right: 5px;
+    user-select: none; /* ปิดการเลือกไอคอน */
+    pointer-events: none; /* ปิดการเลือกไอคอน */
 }
 .dark-mode .new-chat-button {
-    background: #3b3b3b;
+    background: #dfdfdf;
 }
 .model-select.active {
     background: #e0e0e0;
@@ -78,16 +92,17 @@ body {
     display: none;
     position: absolute;
     top: 35px;
-    left: 35px;
+    left: 50%;
+    transform: translateX(-50%);
     background: #fff;
-    border: 1px solid #000; /* เปลี่ยนสีฟ้าเป็นสีดำ */
+    border: 1px solid #007bff;
     border-radius: 5px;
     z-index: 10;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .dark-mode .model-options {
-    background: #000000;
-    border: 1px solid #000; /* เปลี่ยนสีฟ้าเป็นสีดำ */
+    background: #cacaca;
+    border: 1px solid #d8d8d8;
 }
 .model-options.show {
     display: block;
@@ -108,33 +123,13 @@ body {
     outline: none;
 }
 .model-select-canvas {
-    position: absolute;
-    top: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #fff;
-    border: 1px solid #000; /* เปลี่ยนสีฟ้าเป็นสีดำ */
-    border-radius: 5px;
-    z-index: 10;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     display: none;
-}
-.model-select-canvas.show {
-    transform: scale(1);
-    opacity: 1;
-}
-.model-select-canvas.hide {
-    transform: scale(0);
-    opacity: 0;
-}
-.dark-mode .model-select-canvas {
-    background: #555;
 }
 .model-option {
     position: relative;
     padding: 10px;
     cursor: pointer;
-    border: 1px solid #000; /* เพิ่มขอบให้ text model */
+    border: 1px solid #007bff;
     margin-bottom: 5px;
 }
 .model-option img {
@@ -159,60 +154,93 @@ body {
 .user-input {
     display: flex;
     align-items: center;
-    border-top: 1px solid #e9e9e9;
     padding: 10px;
-    background: #e9e9e9;
+    background: #fff;
     height: 60px;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .dark-mode .user-input {
     background: #555;
 }
 .user-input textarea {
     flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 10px; /* เพิ่มขอบมน */
-    font-size: 16px;
+    padding: 12px 10px; /* ปรับ padding เพื่อให้ข้อความอยู่ห่างจากซ้าย 10px */
+    border: 1px solid #CECECE;
+    border-radius: 20px;
+    font-size: 20px;
     margin-right: 12px;
-    resize: none;
-    height: 40px;
-    text-align: left;
+    resize: none; /* ปิดการปรับขนาดโดยผู้ใช้ */
+    min-height: 30px; /* ปรับความสูงเริ่มต้นให้เท่ากับขนาดหลังเลิกใช้ */
+    max-height: 200px; /* เพิ่มความสูงสูงสุด */
+    min-width: 1000px; /* เพิ่มความกว้างเริ่มต้นเป็น 200px */
+    text-align: left; /* จัดข้อความไปทางซ้าย */
     animation: typing-text 0.5s ease;
     color: #000;
+    font-family: 'Product Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden; /* ซ่อน scrollbars */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out; /* การเปลี่ยนแปลงที่ราบรื่นสำหรับเงาและขอบ */
+}
+.user-input textarea:focus,
+.user-input textarea:hover {
+    border-color: #CECECE;
+    box-shadow: 0 4px 12px rgba(128, 128, 128, 0.2); /* เปลี่ยนเงาเป็นสีเทาเมื่อ focus/hover */
+    outline: none; /* ลบขอบสีดำเมื่อกดใช้ */
+}
+.user-input textarea:blur {
+    height: 30px; /* กลับไปที่ความสูงเริ่มต้น */
+    transition: height 0.5s ease; /* การเปลี่ยนแปลงที่ราบรื่นสำหรับการเปลี่ยนแปลงความสูง */
 }
 .dark-mode .user-input textarea {
     color: #fff;
-    background: #cccccc;
+    background: #fff;
 }
 @keyframes typing-text {
     from { opacity: 0.5; }
     to { opacity: 1; }
 }
-/* เปลี่ยนชื่อ keyframes สำหรับ indicator */
 @keyframes typing-indicator {
-     0%, 100% { transform: scale(1); }
-     50% { transform: scale(1.5); }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.5); }
 }
 .typing-indicator img {
-    width: 20px; /* ลดขนาดให้เท่าขนาด icon ai */
+    width: 20px;
     height: auto;
 }
 .user-input button {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    border: none;
+    border-radius: 50%; /* เปลี่ยนรูปร่างเป็นวงกลม */
+    border: 1px solid #fff; /* เปลี่ยนสีขอบเป็นสีขาว */
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, background 0.3s ease; /* เพิ่ม transition */
     user-select: none;
-    background: none; /* ไม่มีสีพื้นหลัง */
+    background: none;
+    position: relative;
 }
 .user-input button:hover {
-    background: none;
+    background: #E9EAEB; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
     transform: scale(1.1);
 }
+.user-input button:hover::after {
+    content: 'Send Message';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+}
 .dark-mode .user-input button {
-    color: #fff; /* รักษาสีข้อความในโหมดมืด */
+    color: #fff;
 }
 .user-input button.loading img {
     animation: spin 1s linear infinite;
@@ -222,8 +250,10 @@ body {
     100% { transform: rotate(360deg); }
 }
 .user-input button img {
-    width: 32px; /* เพิ่มขนาดเป็น 32px */
+    width: 32px;
     height: auto;
+    user-select: none; /* ปิดการเลือกไอคอน */
+    pointer-events: none; /* ปิดการเลือกไอคอน */
 }
 .message {
     margin: 10px 0;
@@ -231,6 +261,7 @@ body {
     transition: opacity 0.5s ease;
     display: flex;
     align-items: center;
+    position: relative; /* เพิ่มการจัดตำแหน่งแบบ relative สำหรับปุ่มคัดลอก */
 }
 .message.hide {
     opacity: 0;
@@ -244,40 +275,43 @@ body {
 }
 .user-message {
     justify-content: flex-end;
+    margin-right: 10px; /* เพิ่ม margin เพื่อแยกจาก canvas */
+    animation: fadeIn 0.5s ease; /* เพิ่ม animation fade-in */
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 .bot-message {
-    color: #000000; /* สีข้อความของ AI ในโหมดสว่าง */
+    color: #000;
 }
 .dark-mode .bot-message {
-    color: #ffffff; /* สีข้อความของ AI ในโหมดมืด */
+    color: #fff;
 }
 .icon {
     width: 20px;
     height: auto;
     margin-right: 5px;
+    user-select: none; /* ปิดการเลือกไอคอน */
+    pointer-events: none; /* ปิดการเลือกไอคอน */
 }
 .user-message .icon {
-    margin-left: 5px;
+    margin-left: 10px; /* เพิ่ม margin เพื่อแยกจาก canvas */
     margin-right: 0;
-    order: 1; /* เปลี่ยนตำแหน่ง icon ของ user ไปด้านขวา */
+    order: 1;
 }
 .user-message .message-content {
-    order: 0; /* ข้อความของ user อยู่ด้านซ้ายของ icon */
+    order: 0;
 }
 .bot-message .icon {
     margin-right: 5px;
-    order: 0; /* ตำแหน่ง icon ของ AI อยู่ด้านซ้าย */
+    order: 0;
 }
 .bot-message .message-content {
-    order: 1; /* ข้อความของ AI อยู่ด้านขวาของ icon */
+    order: 1;
 }
 .typing-indicator {
     display: inline-block;
-}
-canvas {
-    margin-top: 10px;
-    border: 1px solid #ccc;
-    display: none;
 }
 .tab {
     display: flex;
@@ -287,67 +321,80 @@ canvas {
     background: #e9e9e9;
 }
 .dark-mode .tab {
-    background: #ffffff;
+    background: #555;
 }
 .tab.active {
     font-weight: bold;
     background: #d3d3d3;
 }
 .mode-toggle {
-    display: none; /* ซ่อนปุ่มปรับ brightness darkness */
+    display: none;
 }
 .code-canvas {
-    margin-top: 10px;
-    border: 1px solid #ccc;
-    display: none;
-    width: 100%;
-    height: auto;
+    display: block; /* ทำให้ code canvas แสดงผล */
+    margin-bottom: 10px; /* เพิ่ม margin เพื่อแยกจากปุ่มคัดลอก */
+    background-color: #1e1e1e; /* ตั้งค่าสีพื้นหลังเป็นสีดำ */
+    color: #ffffff; /* ตั้งค่าสีข้อความเป็นสีขาว */
+    font-family: 'Product Sans', Consolas, "Courier New", monospace; /* ใช้ฟอนต์ Product Sans */
+    overflow: auto; /* เปิดการเลื่อน */
+    padding: 10px; /* เพิ่ม padding เพื่อให้อ่านง่ายขึ้น */
+    border-radius: 5px; /* เพิ่ม border radius เพื่อความสวยงาม */
 }
-/* CSS สำหรับ markdown code block */
+.code-canvas .keyword {
+    color: #569cd6; /* สีของ keyword */
+}
+.code-canvas .string {
+    color: #ce9178; /* สีของ string */
+}
+.code-canvas .comment {
+    color: #6a9955; /* สีของ comment */
+}
+.code-canvas .number {
+    color: #b5cea8; /* สีของ number */
+}
+.code-canvas .function {
+    color: #dcdcaa; /* สีของ function */
+}
+.code-canvas .variable {
+    color: #9cdcfe; /* สีของ variable */
+}
+.chat-message {
+    display: flex;
+    align-items: flex-start;
+}
+.chat-message img {
+    margin-right: 10px;
+}
+.chat-message .message-content {
+    flex: 1;
+}
 .markdown-code {
-    background: #000; /* พื้นหลังสีดำ */
-    color: #fff; /* ข้อความสีขาว */
-    border: 1px solid #000;
+    background: #C7CADE; /* เปลี่ยนสีพื้นหลัง */
+    color: #dcdcdc; /* สีข้อความอ่อน */
+    border: 1px solid #ddd;
     border-radius: 5px;
     padding: 10px;
     overflow-x: auto;
     white-space: pre-wrap;
-    font-family: monospace;
+    font-family: 'Product Sans', monospace;
     margin: 10px 0;
-    position: relative; /* สำหรับปุ่มคัดลอก */
+    position: relative;
+    min-height: 100px; /* เพิ่มความสูงขั้นต่ำเพื่อรองรับปุ่มคัดลอก */
 }
 .dark-mode .markdown-code {
-    background: #000;
-    color: #fff;
-    border-color: #000;
+    background: #C7CADE; /* เปลี่ยนสีพื้นหลัง */
+    color: #dcdcdc; /* สีข้อความอ่อน */
+    border-color: #555;
 }
 .copy-button {
     background: none;
     border: none;
     cursor: pointer;
     position: absolute;
-    bottom: 10px; /* ปุ่มคัดลอกอยู่ที่ตำแหน่งขวาล่าง */
+    bottom: 10px;
     right: 10px;
 }
 .copy-button img {
-    width: 20px;
-    height: auto;
-}
-.canvas-container {
-    position: relative;
-    background: #fff; /* สีขาว */
-    border: 1px solid #ffffff; /* ขอบสีเทา */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* เงาที่ขอบ canvas */
-}
-.canvas-copy-button {
-    position: absolute;
-    bottom: 10px; /* ปุ่มคัดลอกอยู่ที่ตำแหน่งขวาล่าง */
-    right: 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-.canvas-copy-button img {
     width: 20px;
     height: auto;
 }
@@ -361,15 +408,15 @@ canvas {
     overflow: hidden;
     border-right: 2px solid;
     animation: blink-caret .75s step-end infinite;
-    vertical-align: top; /* ทำให้ logo ai อยุ่กับที่ ที่บรรทัดแรกของคำตอบ ai */
+    vertical-align: top;
 }
 @keyframes blink-caret {
     from, to { border-color: transparent; }
     50% { border-color: black; }
 }
 .message-content {
-    word-wrap: break-word; /* ป้องกันข้อความล้น */
-    white-space: pre-wrap; /* รักษาการขึ้นบรรทัดใหม่ */
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 .fade-in {
     opacity: 0;
