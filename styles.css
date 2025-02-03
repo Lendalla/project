@@ -51,6 +51,7 @@ body {
     font-size: 16px;
     cursor: pointer;
     outline: none;
+    border-radius: 5px; /* เพิ่มขอบมน */
 }
 .model-select:hover {
     background: #f0f0f0;
@@ -174,9 +175,9 @@ body {
     font-size: 20px;
     margin-right: 50px; /* ปรับตำแหน่งให้ห่างจากปุ่มส่งข้อความ 50px */
     resize: none; /* ปิดการปรับขนาดโดยผู้ใช้ */
-    min-height: 10px; /* ปรับความสูงเริ่มต้นให้เท่ากับขนาดหลังเลิกใช้ */
-    max-height: 60px; /* ลดความสูงสูงสุด */
-    min-width: 100%; /* เพิ่มความกว้างเริ่มต้นเป็น 100% */
+    min-height: 30px; /* ปรับความสูงเริ่มต้นให้เท่ากับขนาดหลังเลิกใช้ */
+    max-height: 30px; /* ลดความสูงสูงสุด */
+    min-width: 130%; /* เพิ่มความกว้างเริ่มต้นเป็น 100% */
     text-align: left; /* จัดข้อความไปทางซ้าย */
     animation: typing-text 0.5s ease;
     color: #000;
@@ -184,7 +185,7 @@ body {
     overflow: hidden; /* ซ่อน scrollbars */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
     transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out; /* การเปลี่ยนแปลงที่ราบรื่นสำหรับเงาและขอบ */
-    margin-left: -50px; /* ขยับตำแหน่งไปทางซ้าย 60px */
+    margin-left: -60px; /* ขยับตำแหน่งไปทางซ้าย 60px */
 }
 .user-input textarea:focus,
 .user-input textarea:hover {
@@ -213,8 +214,8 @@ body {
     height: auto;
 }
 .user-input button {
-    width: 50px;
-    height: 50px;
+    width: 40px; /* ลดขนาดปุ่ม */
+    height: 40px; /* ลดขนาดปุ่ม */
     border-radius: 50%; /* เปลี่ยนรูปร่างเป็นวงกลม */
     border: 1px solid #fff; /* เปลี่ยนสีขอบเป็นสีขาว */
     cursor: pointer;
@@ -252,7 +253,7 @@ body {
     100% { transform: rotate(360deg); }
 }
 .user-input button img {
-    width: 32px;
+    width: 24px; /* ปรับขนาดไอคอนให้เล็กลง */
     height: auto;
     user-select: none; /* ปิดการเลือกไอคอน */
     pointer-events: none; /* ปิดการเลือกไอคอน */
@@ -335,7 +336,7 @@ body {
 .code-canvas {
     display: block; /* ทำให้ code canvas แสดงผล */
     margin-bottom: 10px; /* เพิ่ม margin เพื่อแยกจากปุ่มคัดลอก */
-    background-color: #1e1e1e; /* ตั้งค่าสีพื้นหลังเป็นสีดำ */
+    background-color: #000000; /* ตั้งค่าสีพื้นหลังเป็นสีดำ */
     color: #ffffff; /* ตั้งค่าสีข้อความเป็นสีขาว */
     font-family: 'Product Sans', Consolas, "Courier New", monospace; /* ใช้ฟอนต์ Product Sans */
     overflow: auto; /* เปิดการเลื่อน */
