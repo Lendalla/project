@@ -177,7 +177,7 @@ body {
     resize: none; /* ปิดการปรับขนาดโดยผู้ใช้ */
     min-height: 30px; /* ปรับความสูงเริ่มต้นให้เท่ากับขนาดหลังเลิกใช้ */
     max-height: 30px; /* ลดความสูงสูงสุด */
-    min-width: 130%; /* เพิ่มความกว้างเริ่มต้นเป็น 100% */
+    min-width: 200%; /* เพิ่มความกว้างเริ่มต้นเป็น 100% */
     text-align: left; /* จัดข้อความไปทางซ้าย */
     animation: typing-text 0.5s ease;
     color: #000;
@@ -263,40 +263,31 @@ body {
     opacity: 1;
     transition: opacity 0.5s ease;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     position: relative; /* เพิ่มการจัดตำแหน่งแบบ relative สำหรับปุ่มคัดลอก */
+    flex-wrap: nowrap; /* ป้องกันการห่อของไอคอน */
 }
 .message.hide {
     opacity: 0;
 }
-.bot-message {
-    animation: textAppear 122ms steps(5, end) forwards;
+.message .icon {
+    flex-shrink: 0; /* ป้องกันการย่อของไอคอน */
+    margin-right: 5px;
 }
-@keyframes textAppear {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+.message .message-content {
+    flex: 1;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 .user-message {
     justify-content: flex-end;
     margin-right: 10px; /* เพิ่ม margin เพื่อแยกจาก canvas */
     animation: fadeIn 0.5s ease; /* เพิ่ม animation fade-in */
+    text-align: right; /* จัดข้อความไปทางขวา */
 }
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-.bot-message {
-    color: #000;
-}
-.dark-mode .bot-message {
-    color: #fff;
-}
-.icon {
-    width: 20px;
-    height: auto;
-    margin-right: 5px;
-    user-select: none; /* ปิดการเลือกไอคอน */
-    pointer-events: none; /* ปิดการเลือกไอคอน */
 }
 .user-message .icon {
     margin-left: 10px; /* เพิ่ม margin เพื่อแยกจาก canvas */
@@ -305,6 +296,20 @@ body {
 }
 .user-message .message-content {
     order: 0;
+    text-align: right; /* จัดข้อความไปทางขวา */
+}
+.bot-message {
+    animation: textAppear 122ms steps(5, end) forwards;
+}
+@keyframes textAppear {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+.bot-message {
+    color: #000;
+}
+.dark-mode .bot-message {
+    color: #fff;
 }
 .bot-message .icon {
     margin-right: 5px;
@@ -312,6 +317,13 @@ body {
 }
 .bot-message .message-content {
     order: 1;
+}
+.icon {
+    width: 20px;
+    height: auto;
+    margin-right: 5px;
+    user-select: none; /* ปิดการเลือกไอคอน */
+    pointer-events: none; /* ปิดการเลือกไอคอน */
 }
 .typing-indicator {
     display: inline-block;
