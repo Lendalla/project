@@ -183,7 +183,7 @@ function displayMessage(message, sender) {
             // ดึงข้อความที่ไม่ใช่โค้ด (ถ้ามี)
             const textContent = message.split(/```[\s\S]*?```/)[0].trim();
             if (textContent) {
-                messageDiv.innerHTML = `<div class="message-content">${textContent} ${emoji}</div>` + icon;
+                messageDiv.innerHTML = icon + `<div class="message-content">${textContent} ${emoji}</div>`;
                 chatBox.appendChild(messageDiv);
             }
             displayCode(codeContent);
@@ -194,7 +194,7 @@ function displayMessage(message, sender) {
         }
     } else {
         if (sender === 'user') {
-            messageDiv.innerHTML = `<div class="message-content">${formattedMessage}</div>` + icon; 
+            messageDiv.innerHTML = icon + `<div class="message-content">${formattedMessage}</div>`; 
             chatBox.appendChild(messageDiv);
         } else {
             messageDiv.innerHTML = icon + `<div class="message-content typing-effect"></div>`; 
