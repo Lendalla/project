@@ -1,172 +1,160 @@
-<style>
-    /* === CSS เพิ่มเติม === */
-    .chat-messages {
-        overflow-y: auto;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        padding: 15px;
-    }
+<script>
+    const apiKey = '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'; // API key ของคุณ
+    const userInput = document.getElementById('user-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const mainTextElement = document.querySelector('.main-text');
+    const chatInputArea = document.querySelector('.chat-input-area');
+    const botInfoArea = document.querySelector('.bot-info-area');
+    const headerTextElement = document.querySelector('.header-text');
+    const geminiButton = document.getElementById('gemini-button');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const sendIcon = document.getElementById('send-icon');
 
-    .message {
-        background-color: #e2e8f0;
-        color: #333;
-        border-radius: 20px;
-        padding: 10px 15px;
-        margin-bottom: 10px;
-        max-width: 80%;
-        word-wrap: break-word;
-        align-self: flex-start;
-        animation: fadeIn 0.5s ease-in-out;
-    }
+    let currentModelVersion = "2o"; // Default version
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
+    geminiButton.addEventListener('click', function(event) {
+        dropdownMenu.classList.toggle('show');
+        event.stopPropagation();
+    });
+
+    dropdownMenu.addEventListener('click', function(event) {
+        if (event.target.classList.contains('dropdown-item')) {
+            const selectedVersion = event.target.dataset.modelVersion;
+            currentModelVersion = selectedVersion;
+            dropdownMenu.classList.remove('show');
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!geminiButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.remove('show');
         }
-    }
+    });
 
-    .bot-message {
-        background-color: #e0f7fa;
-        align-self: flex-start;
-    }
+    sendIcon.addEventListener('click', sendMessage);
 
-    .bot-info {
-        background-color: #fff3cd;
-        align-self: flex-start;
-        font-size: 0.875rem;
-        color: #85640a;
-        border: 1px solid #ffe0b2;
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-        margin-bottom: 0.75rem;
-    }
+    userInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+            event.preventDefault();
+        }
+    });
 
-    .user-message {
-        background-color: #dcedc8;
-        align-self: flex-end;
-    }
+    async function sendMessage() {
+        const messageText = userInput.value;
+        if (!messageText) return;
 
-    .dropdown-menu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 0.5rem;
-        padding: 0.5rem 0;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        z-index: 10;
-        display: none;
-    }
+        addUserMessage(messageText);
+        userInput.value = '';
 
-    .dropdown-menu.show {
-        display: block;
-    }
-
-    .dropdown-item {
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        font-size: 0.875rem;
-        color: #333;
-    }
-
-    .dropdown-item:hover {
-        background-color: #f0f0f0;
-    }
-
-    /* สไตล์สำหรับแสดงโค้ด */
-    .code-block {
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        padding: 15px;
-        margin: 10px 0;
-        overflow-x: auto;
-    }
-
-    .code-block pre {
-        margin: 0;
-        font-family: "Courier New", Courier, monospace;
-        font-size: 14px;
-        color: #333;
-    }
-
-    .code-block code {
-        display: block;
-        white-space: pre-wrap;
-    }
-
-    .copy-button {
-        cursor: pointer;
-        color: #6b7280;
-    }
-
-    .copy-button:hover {
-        color: #1f2937;
-    }
-
-    /* === Responsive Design สำหรับโทรศัพท์ === */
-    @media (max-width: 768px) {
-        .main-text {
-            font-size: 2rem; /* ปรับขนาดฟอนต์ให้เล็กลง */
+        if (mainTextElement) {
+            mainTextElement.style.display = 'none';
+        }
+        if (chatMessages) {
+            chatMessages.classList.remove('items-center', 'justify-center');
+            chatMessages.classList.add('items-start', 'justify-start');
+        }
+        if (headerTextElement) {
+            headerTextElement.classList.remove('text-center');
+            headerTextElement.classList.add('text-left');
         }
 
-        .chat-messages {
-            padding: 10px; /* ลด padding */
-            height: 70vh; /* ปรับความสูงของพื้นที่แชท */
+        const botResponse = await getBotResponse(messageText);
+        addBotMessage(botResponse);
+    }
+
+    function addUserMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'user-message');
+        messageElement.innerHTML = `<p>${message}</p>`;
+        chatMessages.appendChild(messageElement);
+        scrollToBottom();
+    }
+
+    function addBotMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'bot-message');
+
+        // ตรวจสอบว่าข้อความมีโค้ดหรือไม่
+        if (message.includes("```")) {
+            const codeContent = extractCode(message);
+            messageElement.innerHTML = `
+                <div class="code-block">
+                    <div class="flex justify-between items-center mb-2">
+                        <h1 class="text-lg font-semibold text-gray-900"># ตัวอย่างโค้ด</h1>
+                        <button class="copy-button text-gray-500 hover:text-gray-700" onclick="copyCode(this)">
+                            <i class="fas fa-copy"></i> Copy code
+                        </button>
+                    </div>
+                    <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto">
+                        <code class="text-sm">${codeContent}</code>
+                    </pre>
+                </div>
+            `;
+        } else {
+            messageElement.innerHTML = `<p>${message}</p>`;
         }
 
-        .message {
-            max-width: 90%; /* เพิ่มความกว้างของข้อความ */
-            font-size: 14px; /* ปรับขนาดฟอนต์ */
-        }
+        chatMessages.appendChild(messageElement);
+        scrollToBottom();
+    }
 
-        .chat-input-area {
-            padding: 8px; /* ลด padding */
-            border-radius: 20px; /* ปรับขอบมน */
+    function extractCode(message) {
+        const codeRegex = /```[\s\S]*?```/g;
+        const matches = message.match(codeRegex);
+        if (matches) {
+            return matches[0].replace(/```/g, '').trim();
         }
+        return message;
+    }
 
-        .user-input-field {
-            font-size: 14px; /* ปรับขนาดฟอนต์ */
-            padding: 8px 12px; /* ปรับ padding */
-        }
+    function copyCode(button) {
+        const codeElement = button.closest('.code-block').querySelector('code');
+        const textToCopy = codeElement.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-copy"></i> Copy code';
+            }, 2000);
+        });
+    }
 
-        .bot-info-area {
-            font-size: 12px; /* ปรับขนาดฟอนต์ */
-            padding: 8px; /* ลด padding */
-            margin-bottom: 8px; /* ลด margin */
-        }
+    async function getBotResponse(message) {
+        const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+        const modelName = "qwen-2.5-32b";
 
-        .header-text {
-            font-size: 16px; /* ปรับขนาดฟอนต์ */
-        }
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                    'Groq-Api-Key': apiKey
+                },
+                body: JSON.stringify({
+                    "messages": [{"role": "user", "content": message}],
+                    "model": modelName,
+                    "temperature": 0.6,
+                    "max_tokens": 4096,
+                    "top_p": 0.95,
+                    "stream": false
+                })
+            });
 
-        .profile-icon {
-            width: 30px; /* ปรับขนาดไอคอนโปรไฟล์ */
-            height: 30px;
-        }
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-        .code-block {
-            padding: 10px; /* ลด padding */
-        }
-
-        .code-block pre {
-            font-size: 12px; /* ปรับขนาดฟอนต์โค้ด */
-        }
-
-        footer {
-            padding: 10px; /* ลด padding ของ footer */
-        }
-
-        /* ปรับขนาดและระยะห่างของ icon ส่งข้อความ */
-        .magic-button {
-            font-size: 20px; /* ปรับขนาดไอคอน */
-            margin: 0 8px; /* ปรับระยะห่าง */
+            const responseData = await response.json();
+            const botReply = responseData.choices[0].message.content;
+            return botReply || "เกิดข้อผิดพลาดในการรับข้อความตอบกลับ";
+        } catch (error) {
+            console.error('เกิดข้อผิดพลาดในการเรียก API:', error);
+            return "ไม่สามารถเชื่อมต่อกับ AI ได้ในขณะนี้";
         }
     }
-</style>
+
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+</script>
