@@ -31,7 +31,7 @@
         }
     });
 
-    sendIcon.addEventListener('click', sendMessage);
+    sendIcon.addEventListener('click', sendMessage); // ตรวจสอบการคลิกที่ปุ่มส่งข้อความ
 
     userInput.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
@@ -45,7 +45,7 @@
         if (!messageText) return;
 
         addUserMessage(messageText);
-        userInput.value = '';
+        userInput.value = ''; // ล้างข้อความหลังจากส่ง
 
         if (mainTextElement) {
             mainTextElement.style.display = 'none';
@@ -78,7 +78,7 @@
         // ตรวจสอบว่าข้อความมีโค้ดหรือไม่
         if (message.includes("```")) {
             const codeContent = extractCode(message);
-            messageElement.innerHTML = `
+            messageElement.innerHTML = ` 
                 <div class="code-block">
                     <div class="flex justify-between items-center mb-2">
                         <h1 class="text-lg font-semibold text-gray-900"># ตัวอย่างโค้ด</h1>
