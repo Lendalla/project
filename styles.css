@@ -118,7 +118,7 @@
 
         .chat-messages {
             padding: 10px; /* ลด padding */
-            height: 150vh; /* ปรับความสูงของพื้นที่แชท */
+            height: 70vh; /* ปรับความสูงของพื้นที่แชท */
         }
 
         .message {
