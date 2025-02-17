@@ -8,7 +8,7 @@
     const headerTextElement = document.querySelector('.header-text');
     const geminiButton = document.getElementById('gemini-button');
     const dropdownMenu = document.getElementById('dropdown-menu');
-    const sendIcon = document.getElementById('send-icon');
+    const sendIcon = document.getElementById('send-icon'); // กำหนดให้จับการคลิกที่ icon
 
     let currentModelVersion = "2o"; // Default version
 
@@ -31,12 +31,14 @@
         }
     });
 
-    sendIcon.addEventListener('click', sendMessage); // ตรวจสอบการคลิกที่ปุ่มส่งข้อความ
+    // เพิ่ม event listener สำหรับการคลิกที่ไอคอนส่งข้อความ
+    sendIcon.addEventListener('click', sendMessage);
 
+    // เพิ่ม event listener สำหรับการกด Enter
     userInput.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {  // ตรวจสอบว่าไม่กด Shift+Enter เพื่อขึ้นบรรทัดใหม่
             sendMessage();
-            event.preventDefault();
+            event.preventDefault();  // ป้องกันการขึ้นบรรทัดใหม่
         }
     });
 
